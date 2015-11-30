@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="zipconstraint-tc" basedir=".">
+
+  <target name="init">      
+  </target>
+  <target name="compile" depends="init" description="compiles the source in this project">
+    <mkdir dir="build/classes"/>
+	<path id="lib.path.ref">
+		<fileset dir="lib" includes="*.jar"/>
+	</path>
+
+    <javac srcdir="src/main/java"
+           destdir="build/classes"
+           debug="on"
+           listfiles="yes"
+           deprecation="yes"
+           includeantruntime="false"
+           nowarn="true"
+           fork="true"
+           memoryinitialsize="256m"
+           memorymaximumsize="1024m"
+           classpathref="lib.path.ref"
+           target="1.6"
+           source="1.6"/>
+		<copy todir="build/classes">
+			<fileset dir="src/main/java" includes="**/*.properties"/>
+			<fileset dir="src/main/java" includes="**/*.xml"/>
+			<fileset dir="src/main/java" includes="**/*.xsl"/>
+			<fileset dir="src/main/java" includes="**/*.html"/>
+			<fileset dir="src/main/java" includes="**/*.vtl"/>            
+			<fileset dir="src/main/java" includes="**/*.stx"/>            
+		</copy>	
+  </target>
+  <target name="jar" depends="compile" description="jars the classes and resources">
+    <jar destfile="build/zip-constraint-tc.jar" index="true" basedir="build/classes"/>
+  </target>
+  <target name="clean">
+    <delete failonerror="false" dir="build/classes"/>
+    <delete failonerror="false" dir="build"/>
+  </target>
+  <target name="rebuild" depends="clean,jar"/>
+
+  <taskdef name="xjc" classname="com.sun.tools.xjc.XJCTask">
+    <classpath>
+      <fileset dir="lib/" includes="*.jar"/>
+    </classpath>
+  </taskdef>
+
+  <target name="compile-xsd">
+    <xjc schema="src/main/java/com/brix/tc/zip/xsd/ZipConstraints.xsd" destdir="src/main/java/" package="com.brix.tc.zip.xsd"/>
+  </target>
+</project>

@@ -1,0 +1,108 @@
+Zip Constraints are a list of both individual zip codes and zip code ranges that are used to determine the availability of certain products.  
+When our system receives these zip codes they might be provided in a format that is not optimal for us to use and store.  
+For instance we might just get the zip codes as one big list without any zip codes consolidated into ranges.  You will be writing an 
+implementation of a class that given a raw list of zip codes and zip code ranges will consolidate them into an ordered list that contains the 
+minimum amount of entries to represent just the zip codes and zip code ranges in the input.  For this exercise you will be using only 5 digit zip codes.
+
+The first part of the challenge will be to implement this interface(which is already contained in the project):
+public interface ZipConsolidator {
+       
+   /**
+	* Consolidates an array of zip codes and ranges
+	* 
+	* @param zipList array with each entry being either a single zip code or a rang in the format 00000-99999
+	* @return  a list of the consolidated zip codes
+	*/
+   public List<String> consolidateZipCodes(String[] zipList);
+}
+
+Example:
+If the input given is an array containing the following:
+
+"00000"
+"06412-06578" 
+"99999"
+"00001"
+"99998"
+"06579"
+"00005"
+
+The output would be:
+
+"00000-00001"
+"00005"
+"06412-06579"
+"99998-99999"
+
+Note:  The input and output will be strings, but will not include the quote character.
+
+The second part of the challenge will be to write a command line app that given a text file of zip codes will consolidate them and output either a text file 
+or an xml file (A shell command line app has been provided in the project).   The app should take 2 parameters the path of the input file and the path of the output file.  
+If the output file has a “.xml” suffix the output should be in xml format (an example will be provided below).
+
+The input file will contain data in this format:
+
+99999
+06412-06578
+00000
+99998
+00001
+04106-04210
+04101-04105
+04211-04220
+35019-35020
+35033-35035
+35203
+35204-35205
+35206-35209
+35210
+35211-35213
+
+And the ouput should look like this:
+
+00000-00001
+04101-04220
+06412-06578
+35019-35020
+35033-35035
+35203-35213
+99998-99999
+
+Or be valid xml in this format:
+
+<ZipConstraints>
+	<ZIPConstraint>
+		<ZIPRangeEnd>00001</ZIPRangeEnd>
+		<ZIPRangeStart>00000</ZIPRangeStart>
+	</ZIPConstraint>
+	<ZIPConstraint>
+		<ZIPRangeEnd>04220</ZIPRangeEnd>
+		<ZIPRangeStart>04101</ZIPRangeStart>
+	</ZIPConstraint>
+	<ZIPConstraint>
+		<ZIPRangeEnd>06578</ZIPRangeEnd>
+		<ZIPRangeStart>06412</ZIPRangeStart>
+	</ZIPConstraint>
+	<ZIPConstraint>
+		<ZIPRangeEnd>35020</ZIPRangeEnd>
+		<ZIPRangeStart>35019</ZIPRangeStart>
+	</ZIPConstraint>
+	<ZIPConstraint>
+		<ZIPRangeEnd>35035</ZIPRangeEnd>
+		<ZIPRangeStart>35033</ZIPRangeStart>
+	</ZIPConstraint>
+	<ZIPConstraint>
+		<ZIPRangeEnd>35213</ZIPRangeEnd>
+		<ZIPRangeStart>35203</ZIPRangeStart>
+	</ZIPConstraint>
+	<ZIPConstraint>
+		<ZIPRangeEnd>99999</ZIPRangeEnd>
+		<ZIPRangeStart>99998</ZIPRangeStart>
+	</ZIPConstraint>
+</ZipConstraints>
+
+For both parts you can assume that the input data will be valid and no zip code will be represented twice in a single input.   
+The code should be compatible with jdk 1.6.  An ant build file has been provided to help compile and package the application.  
+You can change the build.xml file anyway you need to but running ant jar must create a jar file named zip-contraint-tc.jar in 
+the build directory and the jar file must contain all classes and resources created as part of this challenge.  
+You may use any 3rd party libraries you see fit to complete this challenge, any 3rd party libraries you use must be placed in the lib folder.
