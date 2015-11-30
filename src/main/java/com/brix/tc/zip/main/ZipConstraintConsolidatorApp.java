@@ -1,4 +1,7 @@
-package com.brix.tc.zip;
+package com.brix.tc.zip.main;
+
+import com.brix.tc.zip.consolidator.ZipConsolidator;
+import com.brix.tc.zip.consolidator.ZipConsolidatorImpl;
 
 import java.util.List;
 

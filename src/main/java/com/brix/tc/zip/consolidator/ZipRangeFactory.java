@@ -1,4 +1,4 @@
-package com.brix.tc.zip;
+package com.brix.tc.zip.consolidator;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;

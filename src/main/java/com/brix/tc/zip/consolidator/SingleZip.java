@@ -1,4 +1,4 @@
-package com.brix.tc.zip;
+package com.brix.tc.zip.consolidator;
 
 /**
  * Created by Tyrone on 11/26/2015.
