@@ -37,7 +37,6 @@ public class ZipXmlGenerator {
             zipConstraints.getZIPConstraint().add(zipConstraint);
         }
 
-
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(ZipConstraints.class);
             Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
