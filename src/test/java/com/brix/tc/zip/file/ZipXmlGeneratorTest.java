@@ -1,4 +1,4 @@
-package com.brix.tc.zip.xml;
+package com.brix.tc.zip.file;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -14,7 +14,7 @@ import static org.junit.Assert.*;
 public class ZipXmlGeneratorTest {
 
     @Test
-    public void testGenerateXML() throws Exception {
+    public void testGenerateFile() throws Exception {
 
         // set up
         byte[] expected = IOUtils.toByteArray(ZipXmlGeneratorTest.class.getResourceAsStream("expected.xml"));
@@ -23,7 +23,7 @@ public class ZipXmlGeneratorTest {
 
         // exercise test
         ZipXmlGenerator zipXmlGenerator = new ZipXmlGenerator();
-        byte[] actual = zipXmlGenerator.generateXML(zipRanges);
+        byte[] actual = zipXmlGenerator.generateFile(zipRanges);
 
         //verify
         assertArrayEquals(expected, actual);

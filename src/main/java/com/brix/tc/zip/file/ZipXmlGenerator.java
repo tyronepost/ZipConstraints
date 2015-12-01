@@ -1,4 +1,4 @@
-package com.brix.tc.zip.xml;
+package com.brix.tc.zip.file;
 
 import com.brix.tc.zip.xsd.ZipConstraints;
 
@@ -15,16 +15,21 @@ import java.util.regex.Pattern;
 /**
  * Created by Tyrone on 11/29/2015.
  */
-public class ZipXmlGenerator {
+public class ZipXmlGenerator implements ZipFileGenerator {
 
     private final Pattern SINGLEREGEX = Pattern.compile("^\\d{5}$");
     private final Pattern MULTIREGEX = Pattern.compile("^\\d{5}-\\d{5}$");
 
-    public byte[] generateXML(List<String> zipRanges) throws JAXBException {
+    public byte[] generateFile(List<String> zipRanges) throws ZipFileGeneratorException {
 
         ZipConstraints zipConstraints = createZipConstraints(zipRanges);
-        Marshaller jaxbMarshaller = createMarshaller();
-        byte[] xml = marshalXML(zipConstraints, jaxbMarshaller);
+        byte[] xml;
+        try {
+            Marshaller jaxbMarshaller = createMarshaller();
+            xml = marshalXML(zipConstraints, jaxbMarshaller);
+        } catch (JAXBException e) {
+            throw new ZipFileGeneratorException(e);
+        }
         return xml;
     }
 

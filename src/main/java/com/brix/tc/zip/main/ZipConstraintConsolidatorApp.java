@@ -2,9 +2,9 @@ package com.brix.tc.zip.main;
 
 import com.brix.tc.zip.consolidator.ZipConsolidator;
 import com.brix.tc.zip.consolidator.ZipConsolidatorImpl;
-import com.brix.tc.zip.xml.ZipXmlGenerator;
+import com.brix.tc.zip.file.ZipFileGeneratorException;
+import com.brix.tc.zip.file.ZipXmlGenerator;
 
-import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,8 +40,8 @@ public class ZipConstraintConsolidatorApp {
         ZipXmlGenerator zipXmlGenerator = new ZipXmlGenerator();
         byte[] xml = new byte[0];
         try {
-            xml = zipXmlGenerator.generateXML(consolidatedZipCodes);
-        } catch (JAXBException e) {
+            xml = zipXmlGenerator.generateFile(consolidatedZipCodes);
+        } catch (ZipFileGeneratorException e) {
             e.printStackTrace();
             System.exit(1);
         }
