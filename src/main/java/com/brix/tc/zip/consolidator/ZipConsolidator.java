@@ -13,6 +13,6 @@ public interface ZipConsolidator {
      * @param zipList array with each entry being either a single zip code or a rang in the format 00000-99999
      * @return  a list of the consolidated zip codes
      */
-    public List<String> consolidateZipCodes(String[] zipList);
+    List<String> consolidateZipCodes(String[] zipList);
 	
 }

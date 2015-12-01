@@ -31,6 +31,10 @@ public class ZipConstraintConsolidatorApp {
             out.println("Only two arguments (input file and output file) should be specified");
             return;
         }
+        if (!fileExists(args[0])) {
+            out.println("Input file '" + args[0] + "' does not exist");
+            return;
+        }
 
         String[] zipArray = readInputFile(args[0]);
         List<String> consolidatedZipCodes = consolidateZipCodes(zipArray);
@@ -38,32 +42,9 @@ public class ZipConstraintConsolidatorApp {
         writeOutputFile(args[1], byteArray);
     }
 
-    private static byte[] generateFile(List<String> consolidatedZipCodes, String filename) {
-        ZipCodeFileGeneratorFactory zipCodeFileGeneratorFactory = new ZipCodeFileGeneratorFactory();
-        ZipCodeFileGenerator zipCodeFileGenerator = zipCodeFileGeneratorFactory.makeZipFileGenerator(filename);
-        byte[] byteArray = new byte[0];
-        try {
-            byteArray = zipCodeFileGenerator.generateFile(consolidatedZipCodes);
-        } catch (ZipFileGeneratorException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        return byteArray;
-    }
-
-    private static List<String> consolidateZipCodes(String[] zipArray) {
-        ZipConsolidator zipConsolidator = new ZipConsolidatorImpl();
-        return zipConsolidator.consolidateZipCodes(zipArray);
-    }
-
-    private static void writeOutputFile(String arg, byte[] xmlByteArray) {
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream(arg);
-            fileOutputStream.write(xmlByteArray);
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
+    private static boolean fileExists(String arg) {
+        File file = new File(arg);
+        return  file.exists() && !file.isDirectory() ;
     }
 
     private static String[] readInputFile(String arg) {
@@ -82,4 +63,40 @@ public class ZipConstraintConsolidatorApp {
         }
         return zipArray;
     }
+
+    private static List<String> consolidateZipCodes(String[] zipArray) {
+        out.println("Consolidating zip codes...");
+        ZipConsolidator zipConsolidator = new ZipConsolidatorImpl();
+        out.println("Zip codes consolidated.");
+        return zipConsolidator.consolidateZipCodes(zipArray);
+    }
+
+    private static byte[] generateFile(List<String> consolidatedZipCodes, String filename) {
+        out.println("Generating output file data...");
+        ZipCodeFileGeneratorFactory zipCodeFileGeneratorFactory = new ZipCodeFileGeneratorFactory();
+        ZipCodeFileGenerator zipCodeFileGenerator = zipCodeFileGeneratorFactory.makeZipFileGenerator(filename);
+        byte[] byteArray = new byte[0];
+        try {
+            byteArray = zipCodeFileGenerator.generateFile(consolidatedZipCodes);
+        } catch (ZipFileGeneratorException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        out.println("Output file data generated.");
+        return byteArray;
+    }
+
+    private static void writeOutputFile(String arg, byte[] xmlByteArray) {
+        out.println("Writing output file to disk...");
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(arg);
+            fileOutputStream.write(xmlByteArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        out.println("Output file '" + arg + "' written.");
+    }
+
+
 }

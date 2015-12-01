@@ -1,8 +1,8 @@
 package com.brix.tc.zip.file;
 
-import com.brix.tc.zip.xsd.ZipConstraints;
+import com.brix.tc.zip.xml.ZipConstraints;
 
-import static com.brix.tc.zip.xsd.ZipConstraints.ZIPConstraint;
+import static com.brix.tc.zip.xml.ZipConstraints.ZIPConstraint;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -21,7 +21,6 @@ public class ZipCodeXmlGenerator implements ZipCodeFileGenerator {
     private final Pattern MULTIREGEX = Pattern.compile("^\\d{5}-\\d{5}$");
 
     public byte[] generateFile(List<String> zipRanges) throws ZipFileGeneratorException {
-
         ZipConstraints zipConstraints = createZipConstraints(zipRanges);
         byte[] xml;
         try {
@@ -33,11 +32,13 @@ public class ZipCodeXmlGenerator implements ZipCodeFileGenerator {
         return xml;
     }
 
-    private byte[] marshalXML(ZipConstraints zipConstraints, Marshaller jaxbMarshaller) throws JAXBException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        jaxbMarshaller.marshal(zipConstraints, byteArrayOutputStream);
-        byte[] xml = byteArrayOutputStream.toByteArray();
-        return xml;
+    private ZipConstraints createZipConstraints(List<String> zipRanges) {
+        ZipConstraints zipConstraints = new ZipConstraints();
+        for (String zipRange : zipRanges) {
+            ZIPConstraint zipConstraint = createZipConstraint(zipRange);
+            zipConstraints.getZIPConstraint().add(zipConstraint);
+        }
+        return zipConstraints;
     }
 
     private Marshaller createMarshaller() throws JAXBException {
@@ -47,13 +48,10 @@ public class ZipCodeXmlGenerator implements ZipCodeFileGenerator {
         return jaxbMarshaller;
     }
 
-    private ZipConstraints createZipConstraints(List<String> zipRanges) {
-        ZipConstraints zipConstraints = new ZipConstraints();
-        for (String zipRange : zipRanges) {
-            ZIPConstraint zipConstraint = createZipConstraint(zipRange);
-            zipConstraints.getZIPConstraint().add(zipConstraint);
-        }
-        return zipConstraints;
+    private byte[] marshalXML(ZipConstraints zipConstraints, Marshaller jaxbMarshaller) throws JAXBException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        jaxbMarshaller.marshal(zipConstraints, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
     }
 
     private ZIPConstraint createZipConstraint(String zipRange) {
@@ -73,5 +71,4 @@ public class ZipCodeXmlGenerator implements ZipCodeFileGenerator {
         zipConstraint.setZIPRangeStart(zipRangeArr[0]);
         zipConstraint.setZIPRangeEnd(zipRangeArr[1]);
     }
-
 }

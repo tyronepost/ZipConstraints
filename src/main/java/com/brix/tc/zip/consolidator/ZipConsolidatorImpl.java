@@ -3,7 +3,7 @@ package com.brix.tc.zip.consolidator;
 
 import java.util.*;
 
-import static java.lang.Integer.*;
+import static java.lang.Integer.parseInt;
 
 /**
  * Created by Tyrone on 11/26/2015.
@@ -12,9 +12,18 @@ public class ZipConsolidatorImpl implements ZipConsolidator {
 
     @Override
     public List<String> consolidateZipCodes(String[] zipList) {
+
         SortedSet<ZipRange> zipRangeSet = getSortedZipRanges(zipList);
-        List<String> consolidatedZipCodes = getConsolidatedZipCodes(zipRangeSet);
-        return consolidatedZipCodes;
+        return getConsolidatedZipCodes(zipRangeSet);
+    }
+
+    private SortedSet<ZipRange> getSortedZipRanges(String[] zipList) {
+        SortedSet<ZipRange> zipRangeSet = new TreeSet<ZipRange>();
+        ZipRangeFactory zipRangeFactory = new ZipRangeFactory();
+        for (String zip : zipList) {
+            zipRangeSet.add(zipRangeFactory.makeZipRange(zip));
+        }
+        return zipRangeSet;
     }
 
     private List<String> getConsolidatedZipCodes(SortedSet<ZipRange> zipRangeSet) {
@@ -36,7 +45,6 @@ public class ZipConsolidatorImpl implements ZipConsolidator {
     }
 
     private boolean isMergeable(ZipRange previous, ZipRange next) {
-
         int prevEndRange = parseInt(previous.getEndRange());
         int nextStartRange = parseInt(next.getStartRange());
         int nextEndRange = parseInt(next.getEndRange());
@@ -49,12 +57,5 @@ public class ZipConsolidatorImpl implements ZipConsolidator {
         return new MultiZip(start.getStartRange(), end.getEndRange());
     }
 
-    private SortedSet<ZipRange> getSortedZipRanges(String[] zipList) {
-        SortedSet<ZipRange> zipRangeSet = new TreeSet<ZipRange>();
-        ZipRangeFactory zipRangeFactory = new ZipRangeFactory();
-        for (String zip : zipList) {
-            zipRangeSet.add(zipRangeFactory.makeZipRange(zip));
-        }
-        return zipRangeSet;
-    }
+
 }

@@ -51,6 +51,7 @@
   </taskdef>
 
   <target name="compile-xsd">
-    <xjc schema="src/main/java/com/brix/tc/zip/xsd/ZipConstraints.xsd" destdir="src/main/java/" package="com.brix.tc.zip.xsd"/>
+    <xjc schema="src/main/java/com/brix/tc/zip/xml/ZipConstraints.xsd"
+         destdir="src/main/java/" package="com.brix.tc.zip.xml"/>
   </target>
 </project>
