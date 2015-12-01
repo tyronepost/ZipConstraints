@@ -37,10 +37,10 @@ public class ZipConsolidatorImpl implements ZipConsolidator {
     }
 
     private boolean isMergeable(ZipRange previous, ZipRange next) {
+
         int prevEndRange = parseInt(previous.getEndRange());
         int nextStartRange = parseInt(next.getStartRange());
         int nextEndRange = parseInt(next.getEndRange());
-
         return ((prevEndRange > nextStartRange) && (prevEndRange <= nextEndRange))
                 || (prevEndRange == nextStartRange)
                 || ((prevEndRange < nextStartRange) && ((nextStartRange - prevEndRange) == 1));

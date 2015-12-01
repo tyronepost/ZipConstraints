@@ -4,6 +4,7 @@ import com.brix.tc.zip.consolidator.ZipConsolidator;
 import com.brix.tc.zip.consolidator.ZipConsolidatorImpl;
 import com.brix.tc.zip.xml.ZipXmlGenerator;
 
+import javax.xml.bind.JAXBException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,14 @@ public class ZipConstraintConsolidatorApp {
 
     private static byte[] generateXML(List<String> consolidatedZipCodes) {
         ZipXmlGenerator zipXmlGenerator = new ZipXmlGenerator();
-        return zipXmlGenerator.generateXML(consolidatedZipCodes);
+        byte[] xml = new byte[0];
+        try {
+            xml = zipXmlGenerator.generateXML(consolidatedZipCodes);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return xml;
     }
 
     private static List<String> consolidateZipCodes(String[] zipArray) {
@@ -51,6 +59,7 @@ public class ZipConstraintConsolidatorApp {
             fileOutputStream.write(xmlByteArray);
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
@@ -66,6 +75,7 @@ public class ZipConstraintConsolidatorApp {
             zipArray = zipList.toArray(new String[zipList.size()]);
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(1);
         }
         return zipArray;
     }

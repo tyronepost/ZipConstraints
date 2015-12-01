@@ -1,6 +1,7 @@
 package com.brix.tc.zip.xml;
 
 import com.brix.tc.zip.xsd.ZipConstraints;
+
 import static com.brix.tc.zip.xsd.ZipConstraints.ZIPConstraint;
 
 import javax.xml.bind.JAXBContext;
@@ -19,35 +20,53 @@ public class ZipXmlGenerator {
     private final Pattern SINGLEREGEX = Pattern.compile("^\\d{5}$");
     private final Pattern MULTIREGEX = Pattern.compile("^\\d{5}-\\d{5}$");
 
-    public byte[] generateXML(List<String> zipRanges) {
+    public byte[] generateXML(List<String> zipRanges) throws JAXBException {
 
+        ZipConstraints zipConstraints = createZipConstraints(zipRanges);
+        Marshaller jaxbMarshaller = createMarshaller();
+        byte[] xml = marshalXML(zipConstraints, jaxbMarshaller);
+        return xml;
+    }
+
+    private byte[] marshalXML(ZipConstraints zipConstraints, Marshaller jaxbMarshaller) throws JAXBException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        jaxbMarshaller.marshal(zipConstraints, byteArrayOutputStream);
+        byte[] xml = byteArrayOutputStream.toByteArray();
+        return xml;
+    }
+
+    private Marshaller createMarshaller() throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(ZipConstraints.class);
+        Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
+        jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        return jaxbMarshaller;
+    }
+
+    private ZipConstraints createZipConstraints(List<String> zipRanges) {
         ZipConstraints zipConstraints = new ZipConstraints();
         for (String zipRange : zipRanges) {
-            ZIPConstraint zipConstraint = new ZIPConstraint();
-            Matcher singleMatcher = SINGLEREGEX.matcher(zipRange);
-            Matcher multiMatcher = MULTIREGEX.matcher(zipRange);
-
-            if (singleMatcher.matches()) {
-                zipConstraint.setZIPRangeStart(zipRange);
-            } else if (multiMatcher.matches()) {
-                String[] zipRangeArr = zipRange.split("-");
-                zipConstraint.setZIPRangeStart(zipRangeArr[0]);
-                zipConstraint.setZIPRangeEnd(zipRangeArr[1]);
-            }
+            ZIPConstraint zipConstraint = createZipConstraint(zipRange);
             zipConstraints.getZIPConstraint().add(zipConstraint);
         }
+        return zipConstraints;
+    }
 
-        try {
-            JAXBContext jaxbContext = JAXBContext.newInstance(ZipConstraints.class);
-            Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-            jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            jaxbMarshaller.marshal(zipConstraints, byteArrayOutputStream);
-            return byteArrayOutputStream.toByteArray();
-        } catch (JAXBException es) {
-
+    private ZIPConstraint createZipConstraint(String zipRange) {
+        ZIPConstraint zipConstraint = new ZIPConstraint();
+        Matcher singleMatcher = SINGLEREGEX.matcher(zipRange);
+        Matcher multiMatcher = MULTIREGEX.matcher(zipRange);
+        if (singleMatcher.matches()) {
+            zipConstraint.setZIPRangeStart(zipRange);
+        } else if (multiMatcher.matches()) {
+            setFullZipRange(zipRange, zipConstraint);
         }
-        return new byte[0];
+        return zipConstraint;
+    }
+
+    private void setFullZipRange(String zipRange, ZIPConstraint zipConstraint) {
+        String[] zipRangeArr = zipRange.split("-");
+        zipConstraint.setZIPRangeStart(zipRangeArr[0]);
+        zipConstraint.setZIPRangeEnd(zipRangeArr[1]);
     }
 
 }

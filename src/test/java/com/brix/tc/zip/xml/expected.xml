@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ZipConstraints>
+    <ZIPConstraint>
+        <ZIPRangeEnd>00001</ZIPRangeEnd>
+        <ZIPRangeStart>00000</ZIPRangeStart>
+    </ZIPConstraint>
+</ZipConstraints>
