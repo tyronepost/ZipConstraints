@@ -12,7 +12,6 @@ public class ZipConsolidatorImpl implements ZipConsolidator {
 
     @Override
     public List<String> consolidateZipCodes(String[] zipList) {
-
         SortedSet<ZipRange> zipRangeSet = getSortedZipRanges(zipList);
         List<String> consolidatedZipCodes = getConsolidatedZipCodes(zipRangeSet);
         return consolidatedZipCodes;

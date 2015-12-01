@@ -11,18 +11,18 @@ import static org.junit.Assert.*;
 /**
  * Created by Tyrone on 11/30/2015.
  */
-public class ZipTxtGeneratorTest {
+public class ZipCodeTxtGeneratorTest {
 
     @Test
     public void testGenerateFile() throws Exception {
         // set up
-        byte[] expected = IOUtils.toByteArray(ZipTxtGeneratorTest.class.getResourceAsStream("expected.tx"));
+        byte[] expected = IOUtils.toByteArray(ZipCodeTxtGeneratorTest.class.getResourceAsStream("expected.txt"));
         List<String> zipRanges = new ArrayList<String>(1);
         zipRanges.add("00000-00001");
 
         // exercise test
-        ZipTxtGenerator zipTxtGenerator = new ZipTxtGenerator();
-        byte[] actual = zipTxtGenerator.generateFile(zipRanges);
+        ZipCodeTxtGenerator zipCodeTxtGenerator = new ZipCodeTxtGenerator();
+        byte[] actual = zipCodeTxtGenerator.generateFile(zipRanges);
 
         //verify
         assertArrayEquals(expected, actual);

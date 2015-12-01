@@ -32,7 +32,11 @@
 		</copy>	
   </target>
   <target name="jar" depends="compile" description="jars the classes and resources">
-    <jar destfile="build/zip-constraint-tc.jar" index="true" basedir="build/classes"/>
+    <jar destfile="build/zip-constraint-tc.jar" index="true" basedir="build/classes">
+      <manifest>
+        <attribute name="Main-Class" value="com.brix.tc.zip.main.ZipConstraintConsolidatorApp"/>
+      </manifest>
+    </jar>
   </target>
   <target name="clean">
     <delete failonerror="false" dir="build/classes"/>

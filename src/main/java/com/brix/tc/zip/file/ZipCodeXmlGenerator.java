@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Created by Tyrone on 11/29/2015.
  */
-public class ZipXmlGenerator implements ZipFileGenerator {
+public class ZipCodeXmlGenerator implements ZipCodeFileGenerator {
 
     private final Pattern SINGLEREGEX = Pattern.compile("^\\d{5}$");
     private final Pattern MULTIREGEX = Pattern.compile("^\\d{5}-\\d{5}$");

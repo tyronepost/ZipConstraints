@@ -2,12 +2,14 @@ package com.brix.tc.zip.main;
 
 import com.brix.tc.zip.consolidator.ZipConsolidator;
 import com.brix.tc.zip.consolidator.ZipConsolidatorImpl;
+import com.brix.tc.zip.file.ZipCodeFileGenerator;
 import com.brix.tc.zip.file.ZipFileGeneratorException;
-import com.brix.tc.zip.file.ZipXmlGenerator;
+import com.brix.tc.zip.file.ZipCodeFileGeneratorFactory;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
 import static java.lang.System.out;
 
 /**
@@ -32,20 +34,21 @@ public class ZipConstraintConsolidatorApp {
 
         String[] zipArray = readInputFile(args[0]);
         List<String> consolidatedZipCodes = consolidateZipCodes(zipArray);
-        byte[] xmlByteArray = generateXML(consolidatedZipCodes);
-        writeOutputFile(args[1], xmlByteArray);
+        byte[] byteArray = generateFile(consolidatedZipCodes, args[1]);
+        writeOutputFile(args[1], byteArray);
     }
 
-    private static byte[] generateXML(List<String> consolidatedZipCodes) {
-        ZipXmlGenerator zipXmlGenerator = new ZipXmlGenerator();
-        byte[] xml = new byte[0];
+    private static byte[] generateFile(List<String> consolidatedZipCodes, String filename) {
+        ZipCodeFileGeneratorFactory zipCodeFileGeneratorFactory = new ZipCodeFileGeneratorFactory();
+        ZipCodeFileGenerator zipCodeFileGenerator = zipCodeFileGeneratorFactory.makeZipFileGenerator(filename);
+        byte[] byteArray = new byte[0];
         try {
-            xml = zipXmlGenerator.generateFile(consolidatedZipCodes);
+            byteArray = zipCodeFileGenerator.generateFile(consolidatedZipCodes);
         } catch (ZipFileGeneratorException e) {
             e.printStackTrace();
             System.exit(1);
         }
-        return xml;
+        return byteArray;
     }
 
     private static List<String> consolidateZipCodes(String[] zipArray) {

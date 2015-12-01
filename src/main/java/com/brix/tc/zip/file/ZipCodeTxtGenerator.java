@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Tyrone on 11/30/2015.
  */
-public class ZipTxtGenerator implements ZipFileGenerator {
+public class ZipCodeTxtGenerator implements ZipCodeFileGenerator {
 
     @Override
     public byte[] generateFile(List<String> zipRanges) throws ZipFileGeneratorException {
@@ -15,7 +15,7 @@ public class ZipTxtGenerator implements ZipFileGenerator {
         for (String zipRange : zipRanges) {
             writeToByteArray(byteArrayOutputStream, zipRange);
         }
-        return new byte[0];
+        return byteArrayOutputStream.toByteArray();
     }
 
     private void writeToByteArray(ByteArrayOutputStream byteArrayOutputStream, String zipRange) throws ZipFileGeneratorException {
